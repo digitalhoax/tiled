@@ -135,7 +135,7 @@ QPainterPath OrthogonalRenderer::shape(const MapObject *object) const
             } else {
                 for (int i = 1; i < screenPolygon.size(); ++i) {
                     path.addPolygon(lineToPolygon(screenPolygon[i - 1],
-                                                  screenPolygon[i]));
+                                    screenPolygon[i]));
                 }
                 path.setFillRule(Qt::WindingFill);
             }
@@ -236,22 +236,22 @@ void OrthogonalRenderer::drawTileLayer(QPainter *painter,
 
     int incX = 1, incY = 1;
     switch (renderOrder) {
-      case Map::RightUp:
+    case Map::RightUp:
         std::swap(startY, endY);
         incY = -1;
         break;
-      case Map::LeftDown:
+    case Map::LeftDown:
         std::swap(startX, endX);
         incX = -1;
         break;
-      case Map::LeftUp:
+    case Map::LeftUp:
         std::swap(startX, endX);
         std::swap(startY, endY);
         incX = -1;
         incY = -1;
         break;
-      case Map::RightDown:
-      default:
+    case Map::RightDown:
+    default:
         break;
     }
 
@@ -259,14 +259,14 @@ void OrthogonalRenderer::drawTileLayer(QPainter *painter,
     endY += incY;
 
     for (int y = startY; y != endY; y += incY) {
-    	for (int x = startX; x != endX; x += incX) {
-    		const Cell &cell = layer->cellAt(x, y);
-    		if (cell.isEmpty())
-    			continue;
-    		renderer.render(cell,
-    						QPointF(x * tileWidth, (y + 1) * tileHeight),
-    						CellRenderer::BottomLeft);
-    	}
+        for (int x = startX; x != endX; x += incX) {
+            const Cell &cell = layer->cellAt(x, y);
+            if (cell.isEmpty())
+                continue;
+            renderer.render(cell,
+                            QPointF(x * tileWidth, (y + 1) * tileHeight),
+                            CellRenderer::BottomLeft);
+        }
     }
 
     renderer.flush();
