@@ -246,18 +246,23 @@ void MapDocumentActionHandler::addTileLayer()
 {
     if (mMapDocument)
         mMapDocument->addLayer(Layer::TileLayerType);
+//        mMapDocument->addLayer(Layer::TileLayerType, parallax);
 }
 
 void MapDocumentActionHandler::addObjectGroup()
 {
     if (mMapDocument)
         mMapDocument->addLayer(Layer::ObjectGroupType);
+//        mMapDocument->addLayer(Layer::ObjectGroupType, parallax);
+
 }
 
 void MapDocumentActionHandler::addImageLayer()
 {
      if (mMapDocument)
          mMapDocument->addLayer(Layer::ImageLayerType);
+//        mMapDocument->addLayer(Layer::ImageLayerType, parallax);
+
 }
 
 void MapDocumentActionHandler::duplicateLayer()

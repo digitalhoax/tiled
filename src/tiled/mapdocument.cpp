@@ -57,6 +57,8 @@
 #include <QRect>
 #include <QUndoStack>
 
+#include <iostream>
+
 using namespace Tiled;
 using namespace Tiled::Internal;
 
@@ -370,10 +372,13 @@ void MapDocument::rotateSelectedObjects(RotateDirection direction)
  * the new layer, emits editLayerNameRequested().
  */
 void MapDocument::addLayer(Layer::TypeFlag layerType)
+//void MapDocument::addLayer(Layer::TypeFlag layerType, float parallax)
 {
     Layer *layer = 0;
     QString name;
 
+    std::cout  << "add Layer nr. " << layerType << std::endl;
+//    std::cout  << "add Layer " << layerType << " with parallax " << parallax << std::endl;
     switch (layerType) {
     case Layer::TileLayerType:
         name = tr("Tile Layer %1").arg(mMap->tileLayerCount() + 1);

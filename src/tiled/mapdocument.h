@@ -150,6 +150,7 @@ public:
     void rotateSelectedObjects(RotateDirection direction);
 
     void addLayer(Layer::TypeFlag layerType);
+//    void addLayer(Layer::TypeFlag layerType, float parallax);
     void duplicateLayer();
     void mergeLayerDown();
     void moveLayerUp(int index);

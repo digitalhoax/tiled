@@ -86,6 +86,9 @@ public slots:
 
     void cropToSelection();
 
+//    void addTileLayer(float parallax);
+//    void addObjectGroup(float parallax);
+//    void addImageLayer(float parallax);
     void addTileLayer();
     void addObjectGroup();
     void addImageLayer();

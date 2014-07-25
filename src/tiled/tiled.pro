@@ -296,7 +296,8 @@ FORMS += aboutdialog.ui \
     preferencesdialog.ui \
     resizedialog.ui \
     saveasimagedialog.ui \
-    tileanimationeditor.ui
+    tileanimationeditor.ui \
+    parallaxdialog.ui
 
 icon32.path = $${PREFIX}/share/icons/hicolor/32x32/apps/
 icon32.files += images/32x32/tiled.png
