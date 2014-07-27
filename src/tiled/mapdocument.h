@@ -149,8 +149,8 @@ public:
     void flipSelectedObjects(FlipDirection direction);
     void rotateSelectedObjects(RotateDirection direction);
 
-    void addLayer(Layer::TypeFlag layerType);
-//    void addLayer(Layer::TypeFlag layerType, float parallax);
+//    void addLayer(Layer::TypeFlag layerType);
+    void addLayer(Layer::TypeFlag layerType, double parallaxX, double parallaxY);
     void duplicateLayer();
     void mergeLayerDown();
     void moveLayerUp(int index);

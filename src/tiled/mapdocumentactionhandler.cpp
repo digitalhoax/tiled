@@ -28,6 +28,7 @@
 #include "mapdocument.h"
 #include "maprenderer.h"
 #include "utils.h"
+#include "parallaxdialog.h"
 
 #include <QAction>
 #include <QApplication>
@@ -244,25 +245,38 @@ void MapDocumentActionHandler::cropToSelection()
 
 void MapDocumentActionHandler::addTileLayer()
 {
-    if (mMapDocument)
-        mMapDocument->addLayer(Layer::TileLayerType);
+        ParallaxDialog parallaxDialog((QWidget*) parent());
+
+        if (parallaxDialog.exec()) {
+
+            if (mMapDocument)
+                mMapDocument->addLayer(Layer::TileLayerType, parallaxDialog.parallaxX(), parallaxDialog.parallaxY());
 //        mMapDocument->addLayer(Layer::TileLayerType, parallax);
+        }
 }
 
 void MapDocumentActionHandler::addObjectGroup()
 {
-    if (mMapDocument)
-        mMapDocument->addLayer(Layer::ObjectGroupType);
-//        mMapDocument->addLayer(Layer::ObjectGroupType, parallax);
+    ParallaxDialog parallaxDialog((QWidget*) parent());
 
+    if (parallaxDialog.exec()) {
+
+        if (mMapDocument)
+            mMapDocument->addLayer(Layer::ObjectGroupType, parallaxDialog.parallaxX(), parallaxDialog.parallaxY());
+//        mMapDocument->addLayer(Layer::ObjectGroupType, parallax);
+    }
 }
 
 void MapDocumentActionHandler::addImageLayer()
 {
-     if (mMapDocument)
-         mMapDocument->addLayer(Layer::ImageLayerType);
-//        mMapDocument->addLayer(Layer::ImageLayerType, parallax);
+    ParallaxDialog parallaxDialog((QWidget*) parent());
 
+    if (parallaxDialog.exec()) {
+
+        if (mMapDocument)
+            mMapDocument->addLayer(Layer::ImageLayerType, parallaxDialog.parallaxX(), parallaxDialog.parallaxY());
+//        mMapDocument->addLayer(Layer::ImageLayerType, parallax);
+    }
 }
 
 void MapDocumentActionHandler::duplicateLayer()

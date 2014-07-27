@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ResizeDialog</class>
- <widget class="QDialog" name="ResizeDialog">
+ <class>ParallaxDialog</class>
+ <widget class="QDialog" name="ParallaxDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -87,7 +87,7 @@
   <connection>
    <sender>okButtonBox</sender>
    <signal>accepted()</signal>
-   <receiver>ResizeDialog</receiver>
+   <receiver>ParallaxDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -103,7 +103,7 @@
   <connection>
    <sender>okButtonBox</sender>
    <signal>rejected()</signal>
-   <receiver>ResizeDialog</receiver>
+   <receiver>ParallaxDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
