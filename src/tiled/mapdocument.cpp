@@ -400,6 +400,13 @@ void MapDocument::addLayer(Layer::TypeFlag layerType, double parallaxX, double p
     setCurrentLayerIndex(index);
 
     emit editLayerNameRequested();
+
+    // TODO: check all layer sizes befor change map size
+    if ( mMap->width() < mMap->width() * parallaxX || mMap->height() < mMap->height() * parallaxY ) {
+        QPoint offset( 0, 0 );
+        QSize size( mMap->width() * parallaxX, mMap->height() * parallaxY );
+        resizeMap(size, offset);
+    }
 }
 
 /**
@@ -479,6 +486,8 @@ void MapDocument::removeLayer(int index)
         return;
 
     mUndoStack->push(new RemoveLayer(this, index));
+
+    // TODO: check layer sizes and change map size
 }
 
 /**
