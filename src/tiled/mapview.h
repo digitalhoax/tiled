@@ -80,6 +80,9 @@ protected:
 
     void adjustCenterFromMousePosition(QPoint &mousePos);
 
+signals:
+    void scrollBarChanged(int, int);
+
 private slots:
     void adjustScale(qreal scale);
     void setUseOpenGL(bool useOpenGL);

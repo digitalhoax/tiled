@@ -272,10 +272,11 @@ TileLayer *VariantToMapConverter::toTileLayer(const QVariantMap &variantMap)
     }
 
     typedef QScopedPointer<TileLayer> TileLayerPtr;
+    // TODO Alex : check parallax value
     TileLayerPtr tileLayer(new TileLayer(name,
                                          variantMap["x"].toInt(),
                                          variantMap["y"].toInt(),
-                                         width, height));
+                                         width, height, 1.0f));
 
     const qreal opacity = variantMap["opacity"].toReal();
     const bool visible = variantMap["visible"].toBool();

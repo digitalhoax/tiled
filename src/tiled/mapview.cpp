@@ -24,6 +24,7 @@
 #include "preferences.h"
 #include "zoomable.h"
 
+#include <QAction>
 #include <QApplication>
 #include <QCursor>
 #include <QGesture>
@@ -227,6 +228,8 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
         vBar->setValue(vBar->value() - d.y());
 
         mLastMousePos = event->globalPos();
+
+        emit scrollBarChanged(hBar->value(), vBar->value());
         return;
     }
 

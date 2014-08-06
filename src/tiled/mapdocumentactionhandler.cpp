@@ -29,6 +29,7 @@
 #include "maprenderer.h"
 #include "utils.h"
 #include "parallaxdialog.h"
+#include "parallaxtileddialog.h"
 
 #include <QAction>
 #include <QApplication>
@@ -245,12 +246,12 @@ void MapDocumentActionHandler::cropToSelection()
 
 void MapDocumentActionHandler::addTileLayer()
 {
-        ParallaxDialog parallaxDialog((QWidget*) parent());
+        ParallaxTiledDialog parallaxDialog((QWidget*) parent());
 
         if (parallaxDialog.exec()) {
 
             if (mMapDocument)
-                mMapDocument->addLayer(Layer::TileLayerType, parallaxDialog.parallaxX(), parallaxDialog.parallaxY());
+                mMapDocument->addLayer(Layer::TileLayerType, parallaxDialog.parallaxX(), parallaxDialog.parallaxX());
 //        mMapDocument->addLayer(Layer::TileLayerType, parallax);
         }
 }

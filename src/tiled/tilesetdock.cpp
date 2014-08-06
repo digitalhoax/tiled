@@ -513,9 +513,14 @@ void TilesetDock::updateCurrentTiles()
     }
 
     // Create a tile layer from the current selection
+
+    // set viewport
+    // TODO Alex : use parallax value from current layer
+    double parallax = 1.0f;
+
     TileLayer *tileLayer = new TileLayer(QString(), 0, 0,
                                          maxX - minX + 1,
-                                         maxY - minY + 1);
+                                         maxY - minY + 1, parallax);
 
     const TilesetModel *model = view->tilesetModel();
     foreach (const QModelIndex &index, indexes) {

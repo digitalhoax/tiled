@@ -522,7 +522,8 @@ void TerrainBrush::updateBrush(QPoint cursorPos, const QVector<QPoint> *list)
     }
 
     // create a stamp for the terrain block
-    TileLayer *stamp = new TileLayer(QString(), 0, 0, brushRect.width(), brushRect.height());
+    // TODO Alex : check parallax value
+    TileLayer *stamp = new TileLayer(QString(), 0, 0, brushRect.width(), brushRect.height(), 1.0f);
 
     for (int y = brushRect.top(); y <= brushRect.bottom(); ++y) {
         for (int x = brushRect.left(); x <= brushRect.right(); ++x) {

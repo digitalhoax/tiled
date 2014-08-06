@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ParallaxDialog</class>
- <widget class="QDialog" name="ParallaxDialog">
+ <class>ParallaxTiledDialog</class>
+ <widget class="QDialog" name="ParallaxTiledDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>248</width>
-    <height>181</height>
+    <height>118</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,38 +20,18 @@
       <string>Parallax</string>
      </property>
      <layout class="QGridLayout" name="_6">
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="parallaxValueX">
-        <property name="decimals">
-         <number>3</number>
-        </property>
-        <property name="singleStep">
-         <double>0.001000000000000</double>
-        </property>
-        <property name="value">
-         <double>1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="parallaxLabelX">
         <property name="text">
-         <string>Value X</string>
+         <string>Value</string>
         </property>
         <property name="buddy">
          <cstring>parallaxValueX</cstring>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="parallaxLabelY">
-        <property name="text">
-         <string>Value Y</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="parallaxValueY">
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="parallaxValueX">
         <property name="decimals">
          <number>3</number>
         </property>
@@ -79,7 +59,6 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>parallaxValueX</tabstop>
   <tabstop>okButtonBox</tabstop>
  </tabstops>
  <resources/>
@@ -87,7 +66,7 @@
   <connection>
    <sender>okButtonBox</sender>
    <signal>accepted()</signal>
-   <receiver>ParallaxDialog</receiver>
+   <receiver>ParallaxTiledDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -103,7 +82,7 @@
   <connection>
    <sender>okButtonBox</sender>
    <signal>rejected()</signal>
-   <receiver>ParallaxDialog</receiver>
+   <receiver>ParallaxTiledDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

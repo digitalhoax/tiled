@@ -35,10 +35,11 @@
 
 using namespace Tiled;
 
-TileLayer::TileLayer(const QString &name, int x, int y, int width, int height):
+TileLayer::TileLayer(const QString &name, int x, int y, int width, int height, double parallax):
     Layer(TileLayerType, name, x, y, width, height),
     mMaxTileSize(0, 0),
-    mGrid(width * height)
+    mGrid(width * height),
+	mParallax(parallax)
 {
     Q_ASSERT(width >= 0);
     Q_ASSERT(height >= 0);
@@ -131,9 +132,10 @@ TileLayer *TileLayer::copy(const QRegion &region) const
     const int offsetX = qMax(0, areaBounds.x() - bounds.x());
     const int offsetY = qMax(0, areaBounds.y() - bounds.y());
 
+    // TODO ALEX: find and set parallax value
     TileLayer *copied = new TileLayer(QString(),
                                       0, 0,
-                                      bounds.width(), bounds.height());
+                                      bounds.width(), bounds.height(), 1.0f);
 
     foreach (const QRect &rect, area.rects())
         for (int x = rect.left(); x <= rect.right(); ++x)
@@ -424,7 +426,7 @@ bool TileLayer::isEmpty() const
  */
 Layer *TileLayer::clone() const
 {
-    return initializeClone(new TileLayer(mName, mX, mY, mWidth, mHeight));
+    return initializeClone(new TileLayer(mName, mX, mY, mWidth, mHeight, mParallax));
 }
 
 TileLayer *TileLayer::initializeClone(TileLayer *clone) const
@@ -433,5 +435,6 @@ TileLayer *TileLayer::initializeClone(TileLayer *clone) const
     clone->mGrid = mGrid;
     clone->mMaxTileSize = mMaxTileSize;
     clone->mOffsetMargins = mOffsetMargins;
+    clone->mParallax = mParallax;
     return clone;
 }

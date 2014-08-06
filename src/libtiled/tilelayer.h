@@ -101,7 +101,7 @@ public:
     /**
      * Constructor.
      */
-    TileLayer(const QString &name, int x, int y, int width, int height);
+    TileLayer(const QString &name, int x, int y, int width, int height, double parallax);
 
     /**
      * Returns the maximum tile size of this layer.
@@ -266,6 +266,8 @@ public:
 
     virtual Layer *clone() const;
 
+    double parallax() const { return mParallax; }
+
 protected:
     TileLayer *initializeClone(TileLayer *clone) const;
 
@@ -273,6 +275,7 @@ private:
     QSize mMaxTileSize;
     QMargins mOffsetMargins;
     QVector<Cell> mGrid;
+    double mParallax;
 };
 
 

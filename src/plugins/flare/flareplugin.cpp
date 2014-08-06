@@ -152,8 +152,9 @@ Tiled::Map *FlarePlugin::read(const QString &fileName)
                 QString value = line.mid(epos + 1, -1).trimmed();
 
                 if (key == QLatin1String("type")) {
+                	// TODO Alex : check parallax value
                     tilelayer = new TileLayer(value, 0, 0,
-                                              map->width(),map->height());
+                                              map->width(),map->height(), 1.0f);
                     map->addLayer(tilelayer);
                 } else if (key == QLatin1String("format")) {
                     if (value == QLatin1String("dec")) {

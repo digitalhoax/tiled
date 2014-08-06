@@ -30,11 +30,13 @@
 
 #include "map.h"
 #include "mapobject.h"
+//#include "mapview.h"
 #include "tile.h"
 #include "tilelayer.h"
 #include "tileset.h"
 
 #include <cmath>
+#include <iostream>
 
 using namespace Tiled;
 
@@ -160,18 +162,24 @@ QPainterPath OrthogonalRenderer::shape(const MapObject *object) const
 void OrthogonalRenderer::drawGrid(QPainter *painter, const QRectF &rect,
                                   QColor gridColor) const
 {
-    const int tileWidth = map()->tileWidth();
-    const int tileHeight = map()->tileHeight();
+    double parallax = 1.2f;//layer->parallax();
+    const int tileWidth = map()->tileWidth() * parallax;
+    const int tileHeight = map()->tileHeight() * parallax;
 
     if (tileWidth <= 0 || tileHeight <= 0)
         return;
 
-    const int startX = qMax(0, (int) (rect.x() / tileWidth) * tileWidth);
-    const int startY = qMax(0, (int) (rect.y() / tileHeight) * tileHeight);
-    const int endX = qMin((int) std::ceil(rect.right()),
-                          map()->width() * tileWidth + 1);
-    const int endY = qMin((int) std::ceil(rect.bottom()),
-                          map()->height() * tileHeight + 1);
+    int startX = 0;
+    int startY = 0;
+    int endX = map()->width() * tileWidth + 1;
+    int endY = map()->height() * tileHeight + 1;
+
+//    const int startX = qMax(0, (int) (rect.x() / tileWidth) * tileWidth);
+//    const int startY = qMax(0, (int) (rect.y() / tileHeight) * tileHeight);
+//    const int endX = qMin((int) std::ceil(rect.right()),
+//                          map()->width() * tileWidth + 1);
+//    const int endY = qMin((int) std::ceil(rect.bottom()),
+//                          map()->height() * tileHeight + 1);
 
     gridColor.setAlpha(128);
 
@@ -199,11 +207,11 @@ void OrthogonalRenderer::drawTileLayer(QPainter *painter,
                                        const QRectF &exposed) const
 {
     const QTransform savedTransform = painter->transform();
-
+    double parallax = layer->parallax();
     const int tileWidth = map()->tileWidth();
     const int tileHeight = map()->tileHeight();
     const QPointF layerPos(layer->x() * tileWidth,
-                           layer->y() * tileHeight);
+                           layer->y() * tileHeight );
 
     painter->translate(layerPos);
 
@@ -212,8 +220,9 @@ void OrthogonalRenderer::drawTileLayer(QPainter *painter,
     int endX = layer->width() -1;
     int endY = layer->height() -1;
 
-    if (!exposed.isNull()) {
+//    if (!exposed.isNull()) {
         QMargins drawMargins = layer->drawMargins();
+
         drawMargins.setTop(drawMargins.top() - tileHeight);
         drawMargins.setRight(drawMargins.right() - tileWidth);
 
@@ -222,13 +231,21 @@ void OrthogonalRenderer::drawTileLayer(QPainter *painter,
                                        drawMargins.left(),
                                        drawMargins.top());
 
-        rect.translate(-layerPos);
+//        std::cout << "ex rect    : " << exposed.left() << ":" << exposed.right() << "  view: " << exposed.right()-exposed.left() << std::endl;
+//        std::cout << "ex div     : " << exposed.left() << ":" << map()->width()*map()->tileWidth()  << std::endl;
+//        std::cout << "ex distance: " << (exposed.left()) / (map()->width()*map()->tileWidth())  << "%" << std::endl;
 
-        startX = qMax((int) rect.x() / tileWidth, 0);
-        startY = qMax((int) rect.y() / tileHeight, 0);
-        endX = qMin((int) std::ceil(rect.right()) / tileWidth, endX);
-        endY = qMin((int) std::ceil(rect.bottom()) / tileHeight, endY);
-    }
+//        std::cout << "rect    : " << rect.left()+ 194 << ":" << rect.right() << "  view: " << rect.right()-rect.left() << std::endl;
+//        std::cout << "div     : " << rect.left()+ 194 << ":" << map()->width()*map()->tileWidth()+ 194  << std::endl;
+//        std::cout << "distance: " << (rect.left()+ 194) / (map()->width()*map()->tileWidth()+ 194)  << "%" << std::endl;
+
+//        rect.translate(-layerPos);
+
+//        startX = qMax((int) rect.x() / tileWidth, 0);
+//        startY = qMax((int) rect.y() / tileHeight, 0);
+//        endX = qMin((int) std::ceil(rect.right()) / tileWidth, endX);
+//        endY = qMin((int) std::ceil(rect.bottom()) / tileHeight, endY);
+//    }
 
     CellRenderer renderer(painter);
 
@@ -258,14 +275,19 @@ void OrthogonalRenderer::drawTileLayer(QPainter *painter,
     endX += incX;
     endY += incY;
 
+    float p = parallax -1;
+    float hb = ((float)m_scrollBarX/(float)m_maxX)*100.0f;
+
+    float offset = tileWidth * hb *p;
+
     for (int y = startY; y != endY; y += incY) {
         for (int x = startX; x != endX; x += incX) {
             const Cell &cell = layer->cellAt(x, y);
             if (cell.isEmpty())
                 continue;
             renderer.render(cell,
-                            QPointF(x * tileWidth, (y + 1) * tileHeight),
-                            CellRenderer::BottomLeft);
+                            QPointF(x * tileWidth * parallax - offset, (y + 1) * tileHeight * parallax),
+                            CellRenderer::BottomLeft, parallax);
         }
     }
 

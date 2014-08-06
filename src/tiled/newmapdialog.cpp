@@ -133,8 +133,9 @@ MapDocument *NewMapDialog::createMap()
 
     // Add a tile layer to new maps of reasonable size
     if (memory < gigabyte) {
+        // TODO Alex : check parallax value
         map->addLayer(new TileLayer(tr("Tile Layer 1"), 0, 0,
-                                    mapWidth, mapHeight));
+                                    mapWidth, mapHeight, 1.0f));
     } else {
         const double gigabytes = (double) memory / gigabyte;
         QMessageBox::warning(this, tr("Memory Usage Warning"),

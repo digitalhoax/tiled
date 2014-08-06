@@ -352,9 +352,10 @@ bool AutoMapper::setupMissingLayers()
             continue;
 
         const int index =  mMapWork->layerCount();
+        // TODO Alex : check parallax value
         TileLayer *tilelayer = new TileLayer(name, 0, 0,
                                              mMapWork->width(),
-                                             mMapWork->height());
+                                             mMapWork->height(), 1.0f);
         mMapDocument->undoStack()->push(
                     new AddLayer(mMapDocument, index, tilelayer));
         mAddedTileLayers.append(name);

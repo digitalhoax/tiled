@@ -26,6 +26,8 @@ DEFINES += QT_NO_CAST_FROM_ASCII \
 DEFINES += TILED_LIBRARY
 contains(QT_CONFIG, reduce_exports): CONFIG += hide_symbols
 
+# INCLUDEPATH += ../tiled
+
 SOURCES += compression.cpp \
     gidmapper.cpp \
     imagelayer.cpp \

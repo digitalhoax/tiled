@@ -50,8 +50,19 @@ void MapRenderer::drawImageLayer(QPainter *painter,
 {
     Q_UNUSED(exposed)
 
-    painter->drawPixmap(imageLayer->position(),
-                        imageLayer->image());
+    // TODO (Alex) : create flag in imagelayer
+    bool scaleImage = true;
+    if ( scaleImage ) {
+        int width = imageLayer->image().width()*2;
+        int height = imageLayer->image().height()*2;
+
+        painter->drawPixmap( imageLayer->position().x() + m_scrollBarX * 2, /*imageLayer->position().y()*/ 0,
+                             width, height,
+                             imageLayer->image());
+    } else {
+        painter->drawPixmap(imageLayer->position(),
+                            imageLayer->image());
+    }
 }
 
 void MapRenderer::setFlag(RenderFlag flag, bool enabled)
@@ -82,7 +93,6 @@ QPolygonF MapRenderer::lineToPolygon(const QPointF &start, const QPointF &end)
     polygon[3] = end + perpendicular + direction;
     return polygon;
 }
-
 
 static bool hasOpenGLEngine(const QPainter *painter)
 {
@@ -126,6 +136,71 @@ void CellRenderer::render(const Cell &cell, const QPointF &pos, Origin origin)
     fragment.height = size.height();
     fragment.scaleX = cell.flippedHorizontally ? -1 : 1;
     fragment.scaleY = cell.flippedVertically ? -1 : 1;
+    fragment.rotation = 0;
+    fragment.opacity = 1;
+
+    if (origin == BottomCenter)
+        fragment.x -= sizeHalf.x();
+
+    if (cell.flippedAntiDiagonally) {
+        fragment.rotation = 90;
+        fragment.scaleX *= -1;
+        std::swap(fragment.scaleX, fragment.scaleY);
+
+        // Compensate for the swap of image dimensions
+        const qreal halfDiff = sizeHalf.y() - sizeHalf.x();
+        fragment.y += halfDiff;
+        if (origin != BottomCenter)
+            fragment.x += halfDiff;
+    }
+
+    if (mIsOpenGL || (fragment.scaleX > 0 && fragment.scaleY > 0)) {
+        mTile = cell.tile;
+        mFragments.append(fragment);
+        return;
+    }
+
+    // The Raster paint engine as of Qt 4.8.4 / 5.0.2 does not support
+    // drawing fragments with a negative scaling factor.
+
+    flush(); // make sure we drew all tiles so far
+
+    const QTransform oldTransform = mPainter->transform();
+    QTransform transform = oldTransform;
+    transform.translate(fragment.x, fragment.y);
+    transform.rotate(fragment.rotation);
+    transform.scale(fragment.scaleX, fragment.scaleY);
+
+    const QRectF target(fragment.width * -0.5, fragment.height * -0.5,
+                        fragment.width, fragment.height);
+    const QRectF source(0, 0, fragment.width, fragment.height);
+
+    mPainter->setTransform(transform);
+    mPainter->drawPixmap(target, image, source);
+    mPainter->setTransform(oldTransform);
+}
+
+void CellRenderer::render(const Cell &cell, const QPointF &pos, Origin origin, double parallax)
+{
+    if (mTile != cell.tile)
+        flush();
+
+    const QPixmap &image = cell.tile->currentFrameImage();
+    const QSizeF size = image.size();
+    const QPoint offset = cell.tile->tileset()->tileOffset();
+    const QPointF sizeHalf = QPointF(size.width() / 2, size.height() / 2);
+
+    QPainter::PixmapFragment fragment;
+    fragment.x = pos.x() + offset.x() + sizeHalf.x();
+    fragment.y = pos.y() + offset.y() + sizeHalf.y() - size.height();
+    fragment.sourceLeft = 0;
+    fragment.sourceTop = 0;
+    fragment.width = size.width();
+    fragment.height = size.height();
+    fragment.scaleX = cell.flippedHorizontally ? -1 : 1;
+    fragment.scaleY = cell.flippedVertically ? -1 : 1;
+    fragment.scaleX = fragment.scaleX * parallax;
+    fragment.scaleY = fragment.scaleY * parallax;
     fragment.rotation = 0;
     fragment.opacity = 1;
 

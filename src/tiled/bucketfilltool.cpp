@@ -138,11 +138,12 @@ void BucketFillTool::tilePositionChanged(const QPoint &tilePos)
     if (!mFillOverlay) {
         // Create a new overlay region
         const QRect fillBounds = mFillRegion.boundingRect();
+        // TODO Alex : check parallax value
         mFillOverlay = new TileLayer(QString(),
                                      fillBounds.x(),
                                      fillBounds.y(),
                                      fillBounds.width(),
-                                     fillBounds.height());
+                                     fillBounds.height(), 1.0f);
     }
 
     // Paint the new overlay
@@ -299,7 +300,7 @@ TileLayer *BucketFillTool::getRandomTileLayer(const QRegion &region) const
 {
     QRect bb = region.boundingRect();
     TileLayer *result = new TileLayer(QString(), bb.x(), bb.y(),
-                                      bb.width(), bb.height());
+                                      bb.width(), bb.height(), 1.0f);
 
     if (region.isEmpty() || mRandomList.empty())
         return result;

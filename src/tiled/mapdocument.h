@@ -373,6 +373,11 @@ private slots:
 
     void onTerrainRemoved(Terrain *terrain);
 
+    void setScrollBarValue(int, int);
+    void setScrollBarValueX(int);
+    void setScrollBarValueY(int);
+    void setZoomValue(int value);
+
 private:
     void setFileName(const QString &fileName);
     void deselectObjects(const QList<MapObject*> &objects);

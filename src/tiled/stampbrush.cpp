@@ -160,8 +160,9 @@ void StampBrush::configureBrush(const QVector<QPoint> &list)
 
     Map *map = mapDocument()->map();
 
+    // TODO Alex : check parallax value
     TileLayer *stamp = new TileLayer(QString(), 0, 0,
-                                     map->width(), map->height());
+                                     map->width(), map->height(), 1.0f);
 
     foreach (const QPoint p, list) {
         const QRegion update = stampRegion.translated(p.x() - mStampX,
@@ -237,7 +238,7 @@ TileLayer *StampBrush::getRandomTileLayer() const
     if (mRandomList.empty())
         return 0;
 
-    TileLayer *ret = new TileLayer(QString(), 0, 0, 1, 1);
+    TileLayer *ret = new TileLayer(QString(), 0, 0, 1, 1, 1.0f);
     ret->setCell(0, 0, mRandomList.at(rand() % mRandomList.size()));
     return ret;
 }

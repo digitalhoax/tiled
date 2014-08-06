@@ -31,7 +31,11 @@
 
 #include "tiled_global.h"
 
+#include <QObject>
 #include <QPainter>
+
+#include <iostream>
+
 
 namespace Tiled {
 
@@ -54,8 +58,10 @@ Q_DECLARE_FLAGS(RenderFlags, RenderFlag)
  * metrics. The different implementations deal with different map
  * orientations.
  */
-class TILEDSHARED_EXPORT MapRenderer
+class TILEDSHARED_EXPORT MapRenderer :public QObject
 {
+
+
 public:
     MapRenderer(const Map *map)
         : mMap(map)
@@ -209,11 +215,22 @@ public:
 
     static QPolygonF lineToPolygon(const QPointF &start, const QPointF &end);
 
+public slots:
+     void setScrollBarValueX(int value, int maxX) { m_scrollBarX = value; m_maxX = maxX; }
+     void setScrollBarValueY(int value, int maxY){ m_scrollBarY = value; m_maxY = maxY; }
+     void setZoomValue(int value){ m_zoom = value; }
+
 protected:
     /**
      * Returns the map this renderer is associated with.
      */
     const Map *map() const { return mMap; }
+
+    int m_scrollBarX;
+    int m_maxX;
+    int m_scrollBarY;
+    int m_maxY;
+    int m_zoom;
 
 private:
     const Map *mMap;
@@ -260,6 +277,8 @@ public:
     ~CellRenderer() { flush(); }
 
     void render(const Cell &cell, const QPointF &pos, Origin origin);
+    void render(const Cell &cell, const QPointF &pos, Origin origin, double parallax);
+
     void flush();
 
 private:

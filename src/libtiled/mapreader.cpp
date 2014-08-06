@@ -536,7 +536,8 @@ TileLayer *MapReaderPrivate::readLayer()
     const int width = atts.value(QLatin1String("width")).toString().toInt();
     const int height = atts.value(QLatin1String("height")).toString().toInt();
 
-    TileLayer *tileLayer = new TileLayer(name, x, y, width, height);
+    //  TODO Alex: write and read parallax value
+    TileLayer *tileLayer = new TileLayer(name, x, y, width, height, 1.0f);
     readLayerAttributes(tileLayer, atts);
 
     while (xml.readNextStartElement()) {

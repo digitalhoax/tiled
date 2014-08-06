@@ -4580,12 +4580,13 @@ _wrap_PyTiledTileLayer__tp_init(PyTiledTileLayer *self, PyObject *args, PyObject
     int y;
     int w;
     int h;
-    const char *keywords[] = {"name", "x", "y", "w", "h", NULL};
+    int p;
+    const char *keywords[] = {"name", "x", "y", "w", "h", "p", NULL};
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, (char *) "s#iiii", (char **) keywords, &name, &name_len, &x, &y, &w, &h)) {
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, (char *) "s#iiii", (char **) keywords, &name, &name_len, &x, &y, &w, &h, &p)) {
         return -1;
     }
-    self->obj = new Tiled::TileLayer(QString::fromUtf8(name), x, y, w, h);
+    self->obj = new Tiled::TileLayer(QString::fromUtf8(name), x, y, w, h, p);
     self->flags = PYBINDGEN_WRAPPER_FLAG_NONE;
     return 0;
 }

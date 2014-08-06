@@ -165,7 +165,7 @@ void TileCollisionEditor::setTile(Tile *tile)
         Map *map = new Map(Map::Orthogonal, 1, 1, tile->width(), tile->height());
         map->addTileset(tile->tileset());
 
-        TileLayer *tileLayer = new TileLayer(QString(), 0, 0, 1, 1);
+        TileLayer *tileLayer = new TileLayer(QString(), 0, 0, 1, 1, 1.0f);
         tileLayer->setCell(0, 0, Cell(tile));
         map->addLayer(tileLayer);
 

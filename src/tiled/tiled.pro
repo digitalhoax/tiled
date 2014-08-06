@@ -158,7 +158,8 @@ SOURCES += aboutdialog.cpp \
     varianteditorfactory.cpp \
     variantpropertymanager.cpp \
     zoomable.cpp \
-    parallaxdialog.cpp
+    parallaxdialog.cpp \
+    parallaxtileddialog.cpp
 
 HEADERS += aboutdialog.h \
     abstractobjecttool.h \
@@ -282,7 +283,8 @@ HEADERS += aboutdialog.h \
     varianteditorfactory.h \
     variantpropertymanager.h \
     zoomable.h \
-    parallaxdialog.h
+    parallaxdialog.h \
+    parallaxtileddialog.h
 
 macx {
     OBJECTIVE_SOURCES += macsupport.mm
@@ -299,7 +301,8 @@ FORMS += aboutdialog.ui \
     resizedialog.ui \
     saveasimagedialog.ui \
     tileanimationeditor.ui \
-    parallaxdialog.ui
+    parallaxdialog.ui \
+    parallaxtileddialog.ui
 
 icon32.path = $${PREFIX}/share/icons/hicolor/32x32/apps/
 icon32.files += images/32x32/tiled.png

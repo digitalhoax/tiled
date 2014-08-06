@@ -26,6 +26,7 @@
 #include "addremovetileset.h"
 #include "changeproperties.h"
 #include "changeselectedarea.h"
+#include "documentmanager.h"
 #include "flipmapobjects.h"
 #include "imagelayer.h"
 #include "isometricrenderer.h"
@@ -55,6 +56,7 @@
 
 #include <QFileInfo>
 #include <QRect>
+#include <QScrollBar>
 #include <QUndoStack>
 
 #include <iostream>
@@ -118,6 +120,45 @@ MapDocument::MapDocument(Map *map, const QString &fileName):
     TilesetManager *tilesetManager = TilesetManager::instance();
     tilesetManager->addReferences(mMap->tilesets());
 }
+
+void MapDocument::setScrollBarValue(int valueX , int valueY) {
+       std::cout << "value: "<< valueX << " " << valueY << std::endl;
+       MapView *view = DocumentManager::instance()->currentMapView();
+
+       if ( view ) {
+           int maxX = view->horizontalScrollBar()->maximum();
+           int maxY = view->verticalScrollBar()->maximum();
+
+           mRenderer->setScrollBarValueX(valueX, maxX);
+           mRenderer->setScrollBarValueY(valueY, maxY);
+       }
+}
+
+void MapDocument::setScrollBarValueX(int value) {
+    MapView *view = DocumentManager::instance()->currentMapView();
+
+    if ( view ) {
+        int maxX = view->horizontalScrollBar()->maximum();
+        std::cout << "scrollbar valueX: "<<  value << " " << maxX << "   "<< ((float)value/(float)maxX) << std::endl;
+        mRenderer->setScrollBarValueX(value, maxX);
+    }
+}
+
+void MapDocument::setScrollBarValueY(int value) {
+    MapView *view = DocumentManager::instance()->currentMapView();
+
+    if ( view ) {
+        int maxY = view->verticalScrollBar()->maximum();
+        std::cout << "scrollbar valueY: "<<  value << " " << maxY << "   "<< ((float)value/(float)maxY) << std::endl;
+        mRenderer->setScrollBarValueY(value, maxY);
+    }
+}
+
+void MapDocument::setZoomValue(int value) {
+       std::cout << "zoom value: "<< value << std::endl;
+       mRenderer->setZoomValue(value);
+}
+
 
 MapDocument::~MapDocument()
 {
@@ -382,7 +423,7 @@ void MapDocument::addLayer(Layer::TypeFlag layerType, double parallaxX, double p
     switch (layerType) {
     case Layer::TileLayerType:
         name = tr("Tile Layer %1").arg(mMap->tileLayerCount() + 1);
-        layer = new TileLayer(name, 0, 0, mMap->width() * parallaxX, mMap->height() * parallaxY);
+        layer = new TileLayer(name, 0, 0, mMap->width() , mMap->height() , parallaxX);
         break;
     case Layer::ObjectGroupType:
         name = tr("Object Layer %1").arg(mMap->objectGroupCount() + 1);
@@ -402,11 +443,11 @@ void MapDocument::addLayer(Layer::TypeFlag layerType, double parallaxX, double p
     emit editLayerNameRequested();
 
     // TODO: check all layer sizes befor change map size
-    if ( mMap->width() < mMap->width() * parallaxX || mMap->height() < mMap->height() * parallaxY ) {
-        QPoint offset( 0, 0 );
-        QSize size( mMap->width() * parallaxX, mMap->height() * parallaxY );
-        resizeMap(size, offset);
-    }
+//    if ( mMap->width() < mMap->width() * parallaxX || mMap->height() < mMap->height() * parallaxY ) {
+//        QPoint offset( 0, 0 );
+//        QSize size( mMap->width() * parallaxX, mMap->height() * parallaxY );
+//        resizeMap(size, offset);
+//    }
 }
 
 /**
