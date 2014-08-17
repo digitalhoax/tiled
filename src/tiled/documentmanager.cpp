@@ -24,6 +24,7 @@
 #include "abstracttool.h"
 #include "maprenderer.h"
 #include "movabletabwidget.h"
+#include "zoomable.h"
 
 #include <QScrollBar>
 #include <QUndoGroup>
@@ -107,11 +108,12 @@ MapView *DocumentManager::viewForDocument(MapDocument *mapDocument) const
 
     MapView * view = static_cast<MapView*>(mTabWidget->widget(index));
     QScrollBar * hBar = view->horizontalScrollBar();
-//    connect(hBar, SIGNAL(valueChanged(int)), this, SLOT(slotSetValue(int)));
     QScrollBar * vBar = view->verticalScrollBar();
-//    connect(vBar, SIGNAL(valueChanged(int)), this, SLOT(slotSetValue(int)));
+    Zoomable * zoomable = view->zoomable();
+
     mapDocument->connect(hBar, SIGNAL(valueChanged(int)), SLOT(setScrollBarValueX(int)));
     mapDocument->connect(vBar, SIGNAL(valueChanged(int)), SLOT(setScrollBarValueY(int)));
+    mapDocument->connect(zoomable, SIGNAL(scaleChanged(qreal)), SLOT(setZoomValue(qreal)));
     mapDocument->connect(view, SIGNAL(scrollBarChanged(int, int)), SLOT(setScrollBarValue(int, int)));
 
     return view;

@@ -35,7 +35,7 @@
 using namespace Tiled;
 
 ImageLayer::ImageLayer(const QString &name, int x, int y, int width, int height):
-    Layer(ImageLayerType, name, x, y, width, height)
+    Layer(ImageLayerType, name, x, y, width, height), m_autoScaled(true)
 {
 }
 

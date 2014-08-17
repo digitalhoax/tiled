@@ -120,6 +120,9 @@ public:
      */
     bool isEmpty() const;
 
+    bool autoScaled() const { return m_autoScaled; }
+    void setAutoScaled( bool autoScaled )  { autoScaled = m_autoScaled; }
+
     Layer *clone() const;
 
     virtual ImageLayer *asImageLayer() { return this; }
@@ -130,7 +133,8 @@ protected:
 private:
     QString mImageSource;
     QColor mTransparentColor;
-    QPixmap mImage;
+    QPixmap mImage;    
+    bool m_autoScaled;
 };
 
 } // namespace Tiled

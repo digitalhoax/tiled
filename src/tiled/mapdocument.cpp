@@ -139,7 +139,7 @@ void MapDocument::setScrollBarValueX(int value) {
 
     if ( view ) {
         int maxX = view->horizontalScrollBar()->maximum();
-        std::cout << "scrollbar valueX: "<<  value << " " << maxX << "   "<< ((float)value/(float)maxX) << std::endl;
+//        std::cout << "scrollbar valueX: "<<  value << " " << maxX << "   "<< ((float)value/(float)maxX) << std::endl;
         mRenderer->setScrollBarValueX(value, maxX);
     }
 }
@@ -149,12 +149,12 @@ void MapDocument::setScrollBarValueY(int value) {
 
     if ( view ) {
         int maxY = view->verticalScrollBar()->maximum();
-        std::cout << "scrollbar valueY: "<<  value << " " << maxY << "   "<< ((float)value/(float)maxY) << std::endl;
+//        std::cout << "scrollbar valueY: "<<  value << " " << maxY << "   "<< ((float)value/(float)maxY) << std::endl;
         mRenderer->setScrollBarValueY(value, maxY);
     }
 }
 
-void MapDocument::setZoomValue(int value) {
+void MapDocument::setZoomValue(qreal value) {
        std::cout << "zoom value: "<< value << std::endl;
        mRenderer->setZoomValue(value);
 }
@@ -269,6 +269,7 @@ Layer *MapDocument::currentLayer() const
  */
 static bool intersects(const QRectF &a, const QRectF &b)
 {
+	// TODO (ALEX) :
     return a.right() >= b.left() &&
             a.bottom() >= b.top() &&
             a.left() <= b.right() &&
@@ -292,6 +293,7 @@ static bool visibleIn(const QRectF &area, MapObject *object,
         boundingRect.translate(pos);
     }
 
+    // TODO (ALEX) :
     return intersects(area, boundingRect);
 }
 

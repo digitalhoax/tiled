@@ -217,8 +217,9 @@ public:
 
 public slots:
      void setScrollBarValueX(int value, int maxX) { m_scrollBarX = value; m_maxX = maxX; }
-     void setScrollBarValueY(int value, int maxY){ m_scrollBarY = value; m_maxY = maxY; }
-     void setZoomValue(int value){ m_zoom = value; }
+     void setScrollBarValueY(int value, int maxY) { m_scrollBarY = value; m_maxY = maxY; }
+
+     void setZoomValue(qreal value) { m_zoom = value; }
 
 protected:
     /**
@@ -228,9 +229,11 @@ protected:
 
     int m_scrollBarX;
     int m_maxX;
+
     int m_scrollBarY;
     int m_maxY;
-    int m_zoom;
+
+    qreal m_zoom;
 
 private:
     const Map *mMap;

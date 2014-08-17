@@ -162,24 +162,29 @@ QPainterPath OrthogonalRenderer::shape(const MapObject *object) const
 void OrthogonalRenderer::drawGrid(QPainter *painter, const QRectF &rect,
                                   QColor gridColor) const
 {
-    double parallax = 1.2f;//layer->parallax();
-    const int tileWidth = map()->tileWidth() * parallax;
-    const int tileHeight = map()->tileHeight() * parallax;
+    //TODO (ALEX)
+//    double parallax = layer->parallax();
+//    const int tileWidth = map()->tileWidth() * parallax;
+//    const int tileHeight = map()->tileHeight() * parallax;
+
+    const int tileWidth = map()->tileWidth();
+    const int tileHeight = map()->tileHeight();
 
     if (tileWidth <= 0 || tileHeight <= 0)
         return;
 
-    int startX = 0;
-    int startY = 0;
-    int endX = map()->width() * tileWidth + 1;
-    int endY = map()->height() * tileHeight + 1;
+    //TODO (ALEX)
+//    int startX = 0;
+//    int startY = 0;
+//    int endX = map()->width() * tileWidth + 1;
+//    int endY = map()->height() * tileHeight + 1;
 
-//    const int startX = qMax(0, (int) (rect.x() / tileWidth) * tileWidth);
-//    const int startY = qMax(0, (int) (rect.y() / tileHeight) * tileHeight);
-//    const int endX = qMin((int) std::ceil(rect.right()),
-//                          map()->width() * tileWidth + 1);
-//    const int endY = qMin((int) std::ceil(rect.bottom()),
-//                          map()->height() * tileHeight + 1);
+    const int startX = qMax(0, (int) (rect.x() / tileWidth) * tileWidth);
+    const int startY = qMax(0, (int) (rect.y() / tileHeight) * tileHeight);
+    const int endX = qMin((int) std::ceil(rect.right()),
+                          map()->width() * tileWidth + 1);
+    const int endY = qMin((int) std::ceil(rect.bottom()),
+                          map()->height() * tileHeight + 1);
 
     gridColor.setAlpha(128);
 
@@ -226,10 +231,10 @@ void OrthogonalRenderer::drawTileLayer(QPainter *painter,
         drawMargins.setTop(drawMargins.top() - tileHeight);
         drawMargins.setRight(drawMargins.right() - tileWidth);
 
-        QRectF rect = exposed.adjusted(-drawMargins.right(),
-                                       -drawMargins.bottom(),
-                                       drawMargins.left(),
-                                       drawMargins.top());
+//        QRectF rect = exposed.adjusted(-drawMargins.right(),
+//                                       -drawMargins.bottom(),
+//                                       drawMargins.left(),
+//                                       drawMargins.top());
 
 //        std::cout << "ex rect    : " << exposed.left() << ":" << exposed.right() << "  view: " << exposed.right()-exposed.left() << std::endl;
 //        std::cout << "ex div     : " << exposed.left() << ":" << map()->width()*map()->tileWidth()  << std::endl;
@@ -302,6 +307,7 @@ void OrthogonalRenderer::drawTileSelection(QPainter *painter,
                                            const QRectF &exposed) const
 {
     foreach (const QRect &r, region.rects()) {
+    	// TODO (ALEX)
         const QRectF toFill = QRectF(boundingRect(r)).intersected(exposed);
         if (!toFill.isEmpty())
             painter->fillRect(toFill, color);

@@ -40,8 +40,24 @@ using namespace Tiled;
 
 QRectF MapRenderer::boundingRect(const ImageLayer *imageLayer) const
 {
-    return QRectF(imageLayer->position(),
-                  imageLayer->image().size());
+
+    // TODO (Alex) : imagelayer
+    bool scaleImage = imageLayer->autoScaled();
+
+    if ( scaleImage ) {
+        QSize size = mapSize();
+
+        float x = size.width();
+        float y = imageLayer->image().size().height();
+
+        QPoint newSize = QPoint(x, y);
+
+        return QRectF(imageLayer->position(), newSize);
+    }
+    else {
+        return QRectF(imageLayer->position(),
+                      imageLayer->image().size());
+    }
 }
 
 void MapRenderer::drawImageLayer(QPainter *painter,
@@ -51,12 +67,18 @@ void MapRenderer::drawImageLayer(QPainter *painter,
     Q_UNUSED(exposed)
 
     // TODO (Alex) : create flag in imagelayer
-    bool scaleImage = true;
-    if ( scaleImage ) {
-        int width = imageLayer->image().width()*2;
-        int height = imageLayer->image().height()*2;
+    bool scaleImage = imageLayer->autoScaled();
 
-        painter->drawPixmap( imageLayer->position().x() + m_scrollBarX * 2, /*imageLayer->position().y()*/ 0,
+    if ( scaleImage ) {
+        QSize size = mapSize();
+        float toMapScale = static_cast<float>(size.height()) / static_cast<float>(imageLayer->image().height());
+
+        int width = imageLayer->image().width() * toMapScale;
+        int height = imageLayer->image().height() * toMapScale;
+
+        qreal zoom = 1 / m_zoom;
+
+        painter->drawPixmap( imageLayer->position().x() + m_scrollBarX * zoom, /*imageLayer->position().y()*/ 0,
                              width, height,
                              imageLayer->image());
     } else {

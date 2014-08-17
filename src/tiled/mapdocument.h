@@ -376,7 +376,7 @@ private slots:
     void setScrollBarValue(int, int);
     void setScrollBarValueX(int);
     void setScrollBarValueY(int);
-    void setZoomValue(int value);
+    void setZoomValue(qreal value);
 
 private:
     void setFileName(const QString &fileName);
