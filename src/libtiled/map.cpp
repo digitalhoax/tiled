@@ -185,6 +185,12 @@ Layer *Map::takeLayerAt(int index)
     return layer;
 }
 
+Layer * Map::getLayerAt(int index)
+{
+    Layer *layer = mLayers.at(index);
+    return layer;
+}
+
 void Map::addTileset(Tileset *tileset)
 {
     mTilesets.append(tileset);

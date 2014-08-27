@@ -48,8 +48,11 @@ QSize OrthogonalRenderer::mapSize() const
 
 QRect OrthogonalRenderer::boundingRect(const QRect &rect) const
 {
-    const int tileWidth = map()->tileWidth();
-    const int tileHeight = map()->tileHeight();
+    float parallax = getParallaxFromCurrentLayer();
+//    std::cout << parallax << std::endl;
+
+    const int tileWidth = map()->tileWidth();//*parallax;
+    const int tileHeight = map()->tileHeight();//*parallax;
 
     return QRect(rect.x() * tileWidth,
                  rect.y() * tileHeight,
@@ -164,27 +167,29 @@ void OrthogonalRenderer::drawGrid(QPainter *painter, const QRectF &rect,
 {
     //TODO (ALEX)
 //    double parallax = layer->parallax();
-//    const int tileWidth = map()->tileWidth() * parallax;
-//    const int tileHeight = map()->tileHeight() * parallax;
+    float parallax = getParallaxFromCurrentLayer();
 
-    const int tileWidth = map()->tileWidth();
-    const int tileHeight = map()->tileHeight();
+    const int tileWidth = map()->tileWidth() * parallax;
+    const int tileHeight = map()->tileHeight() * parallax;
+
+//    const int tileWidth = map()->tileWidth();
+//    const int tileHeight = map()->tileHeight();
 
     if (tileWidth <= 0 || tileHeight <= 0)
         return;
 
-    //TODO (ALEX)
-//    int startX = 0;
-//    int startY = 0;
-//    int endX = map()->width() * tileWidth + 1;
-//    int endY = map()->height() * tileHeight + 1;
+    //TODO (ALEX) draw grid complete
+    int startX = 0;
+    int startY = 0;
+    int endX = map()->width() * tileWidth + 1;
+    int endY = map()->height() * tileHeight + 1;
 
-    const int startX = qMax(0, (int) (rect.x() / tileWidth) * tileWidth);
-    const int startY = qMax(0, (int) (rect.y() / tileHeight) * tileHeight);
-    const int endX = qMin((int) std::ceil(rect.right()),
-                          map()->width() * tileWidth + 1);
-    const int endY = qMin((int) std::ceil(rect.bottom()),
-                          map()->height() * tileHeight + 1);
+//    const int startX = qMax(0, (int) (rect.x() / tileWidth) * tileWidth);
+//    const int startY = qMax(0, (int) (rect.y() / tileHeight) * tileHeight);
+//    const int endX = qMin((int) std::ceil(rect.right()),
+//                          map()->width() * tileWidth + 1);
+//    const int endY = qMin((int) std::ceil(rect.bottom()),
+//                          map()->height() * tileHeight + 1);
 
     gridColor.setAlpha(128);
 
@@ -207,14 +212,16 @@ void OrthogonalRenderer::drawGrid(QPainter *painter, const QRectF &rect,
     }
 }
 
+int i = 0;
+
 void OrthogonalRenderer::drawTileLayer(QPainter *painter,
                                        const TileLayer *layer,
                                        const QRectF &exposed) const
 {
     const QTransform savedTransform = painter->transform();
     double parallax = layer->parallax();
-    const int tileWidth = map()->tileWidth();
-    const int tileHeight = map()->tileHeight();
+    const int tileWidth = map()->tileWidth() * parallax;
+    const int tileHeight = map()->tileHeight() * parallax;
     const QPointF layerPos(layer->x() * tileWidth,
                            layer->y() * tileHeight );
 
@@ -280,18 +287,22 @@ void OrthogonalRenderer::drawTileLayer(QPainter *painter,
     endX += incX;
     endY += incY;
 
+    float zoom = m_zoom;
     float p = parallax -1;
-    float hb = ((float)m_scrollBarX/(float)m_maxX)*100.0f;
+    float hb = ( static_cast<float>(m_scrollBarX) / static_cast<float>(m_maxX) ) * 100.0f;
 
-    float offset = tileWidth * hb *p;
+    // TODO (ALEX) : find values
+    float offset = tileWidth * hb * p * 4 * zoom;
+    std::cout << hb << "   "<< p << std::endl;
 
     for (int y = startY; y != endY; y += incY) {
         for (int x = startX; x != endX; x += incX) {
             const Cell &cell = layer->cellAt(x, y);
             if (cell.isEmpty())
                 continue;
+            std::cout << i << ": " << x << ",  "<< y << std::endl;
             renderer.render(cell,
-                            QPointF(x * tileWidth * parallax - offset, (y + 1) * tileHeight * parallax),
+                            QPointF(x * tileWidth  - offset, (y + 1) * tileHeight),
                             CellRenderer::BottomLeft, parallax);
         }
     }
@@ -299,6 +310,7 @@ void OrthogonalRenderer::drawTileLayer(QPainter *painter,
     renderer.flush();
 
     painter->setTransform(savedTransform);
+    i++;
 }
 
 void OrthogonalRenderer::drawTileSelection(QPainter *painter,
@@ -448,26 +460,42 @@ void OrthogonalRenderer::drawMapObject(QPainter *painter,
 
 QPointF OrthogonalRenderer::pixelToTileCoords(qreal x, qreal y) const
 {
-    return QPointF(x / map()->tileWidth(),
-                   y / map()->tileHeight());
+    float parallax = getParallaxFromCurrentLayer();
+    return QPointF(x / map()->tileWidth() / parallax,
+                   y / map()->tileHeight() / parallax);
 }
 
 QPointF OrthogonalRenderer::tileToPixelCoords(qreal x, qreal y) const
 {
-    return QPointF(x * map()->tileWidth(),
-                   y * map()->tileHeight());
+    float parallax = getParallaxFromCurrentLayer();
+    return QPointF(x * map()->tileWidth()* parallax,
+                   y * map()->tileHeight()* parallax);
+}
+
+float OrthogonalRenderer::getParallaxFromCurrentLayer() const {
+    TileLayer * layer = static_cast<TileLayer *>(m_currentLayer);
+     float parallax = 1.0f;
+
+     if(layer) {
+          parallax = layer->parallax();
+     }
+     return parallax;
 }
 
 QPointF OrthogonalRenderer::screenToTileCoords(qreal x, qreal y) const
 {
-    return QPointF(x / map()->tileWidth(),
-                   y / map()->tileHeight());
+    // TODO (ALEX) : add parallax size
+
+     float parallax = getParallaxFromCurrentLayer();
+     return QPointF( x / map()->tileWidth() / parallax,
+                     y / map()->tileHeight() / parallax );
 }
 
 QPointF OrthogonalRenderer::tileToScreenCoords(qreal x, qreal y) const
 {
-    return QPointF(x * map()->tileWidth(),
-                   y * map()->tileHeight());
+    float parallax = getParallaxFromCurrentLayer();
+    return QPointF(x * map()->tileWidth()* parallax,
+                   y * map()->tileHeight()* parallax);
 }
 
 QPointF OrthogonalRenderer::screenToPixelCoords(qreal x, qreal y) const

@@ -64,7 +64,8 @@ class TILEDSHARED_EXPORT MapRenderer :public QObject
 
 public:
     MapRenderer(const Map *map)
-        : mMap(map)
+        : m_currentLayer(NULL)
+        , mMap(map)
         , mFlags(0)
         , mObjectLineWidth(2)
         , mPainterScale(1)
@@ -215,6 +216,10 @@ public:
 
     static QPolygonF lineToPolygon(const QPointF &start, const QPointF &end);
 
+    qreal zoom() { return m_zoom; }
+
+    void setCurrentLayer( Layer * layer) { m_currentLayer = layer; }
+
 public slots:
      void setScrollBarValueX(int value, int maxX) { m_scrollBarX = value; m_maxX = maxX; }
      void setScrollBarValueY(int value, int maxY) { m_scrollBarY = value; m_maxY = maxY; }
@@ -226,6 +231,8 @@ protected:
      * Returns the map this renderer is associated with.
      */
     const Map *map() const { return mMap; }
+
+    Layer * m_currentLayer;
 
     int m_scrollBarX;
     int m_maxX;

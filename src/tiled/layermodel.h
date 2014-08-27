@@ -116,6 +116,7 @@ public:
      * layer.
      */
     Layer *takeLayerAt(int index);
+    Layer *getLayerAt(int index);
 
     /**
      * Sets whether the layer at the given index is visible.

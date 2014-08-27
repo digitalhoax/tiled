@@ -40,11 +40,10 @@ using namespace Tiled;
 
 QRectF MapRenderer::boundingRect(const ImageLayer *imageLayer) const
 {
-
-    // TODO (Alex) : imagelayer
     bool scaleImage = imageLayer->autoScaled();
 
     if ( scaleImage ) {
+         // TODO (Alex) : update if scrollbar moved
         QSize size = mapSize();
 
         float x = size.width();
@@ -213,8 +212,8 @@ void CellRenderer::render(const Cell &cell, const QPointF &pos, Origin origin, d
     const QPointF sizeHalf = QPointF(size.width() / 2, size.height() / 2);
 
     QPainter::PixmapFragment fragment;
-    fragment.x = pos.x() + offset.x() + sizeHalf.x();
-    fragment.y = pos.y() + offset.y() + sizeHalf.y() - size.height();
+    fragment.x = pos.x() + offset.x() + sizeHalf.x() + (size.width()*parallax - size.width() )/4;
+    fragment.y = pos.y() + offset.y() + sizeHalf.y() - size.height() - (size.height()*parallax - size.height() )/4;
     fragment.sourceLeft = 0;
     fragment.sourceTop = 0;
     fragment.width = size.width();

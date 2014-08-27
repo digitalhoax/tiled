@@ -172,6 +172,12 @@ void LayerModel::insertLayer(int index, Layer *layer)
     emit layerAdded(index);
 }
 
+Layer *LayerModel::getLayerAt(int index)
+{
+    Layer *layer = mMap->getLayerAt(index);
+    return layer;
+}
+
 Layer *LayerModel::takeLayerAt(int index)
 {
     emit layerAboutToBeRemoved(index);

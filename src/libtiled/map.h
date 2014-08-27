@@ -254,6 +254,7 @@ public:
      * The caller becomes responsible for the lifetime of this layer.
      */
     Layer *takeLayerAt(int index);
+    Layer *getLayerAt(int index);
 
     /**
      * Adds a tileset to this map. The map does not take ownership over its

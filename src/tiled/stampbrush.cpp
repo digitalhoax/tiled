@@ -159,10 +159,15 @@ void StampBrush::configureBrush(const QVector<QPoint> &list)
         stampRegion = mStamp->region();
 
     Map *map = mapDocument()->map();
+    TileLayer * tileLayer = brushItem()->tileLayer();
+    float parallax = 1.0f;
+    if ( tileLayer ) {
+        parallax = tileLayer->parallax();
+    }
 
     // TODO Alex : check parallax value
     TileLayer *stamp = new TileLayer(QString(), 0, 0,
-                                     map->width(), map->height(), 1.0f);
+                                     map->width(), map->height(), parallax);
 
     foreach (const QPoint p, list) {
         const QRegion update = stampRegion.translated(p.x() - mStampX,
@@ -362,7 +367,8 @@ void StampBrush::updatePosition()
     if (mIsRandom)
         setRandomStamp();
 
-    const QPoint tilePos = tilePosition();
+    TileLayer *tileLayer = currentTileLayer();
+    const QPoint tilePos = tilePosition();// * tileLayer->parallax();
 
     if (!brushItem()->tileLayer()) {
         brushItem()->setTileRegion(QRect(tilePos, QSize(1, 1)));
@@ -378,6 +384,7 @@ void StampBrush::updatePosition()
         mStampY = tilePos.y() - mStamp->height() / 2;
     }
     brushItem()->setTileLayerPosition(QPoint(mStampX, mStampY));
+    brushItem()->setScale(tileLayer->parallax());
 }
 
 void StampBrush::setRandom(bool value)

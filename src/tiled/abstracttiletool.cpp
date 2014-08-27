@@ -27,6 +27,7 @@
 #include "mapscene.h"
 #include "tile.h"
 #include "tilelayer.h"
+#include "layermodel.h"
 
 #include <cmath>
 
@@ -74,7 +75,13 @@ void AbstractTileTool::mouseLeft()
 
 void AbstractTileTool::mouseMoved(const QPointF &pos, Qt::KeyboardModifiers)
 {
-    const MapRenderer *renderer = mapDocument()->renderer();
+    MapRenderer *renderer = mapDocument()->renderer();
+
+    int currentIndex = mapDocument()->currentLayerIndex();
+    LayerModel * layerModel = mapDocument()->layerModel();
+    Layer * layer = layerModel->getLayerAt(currentIndex);
+    renderer->setCurrentLayer( layer );
+
     const QPointF tilePosF = renderer->screenToTileCoords(pos);
     QPoint tilePos;
 
