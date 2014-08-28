@@ -37,6 +37,8 @@
 #include <QGLWidget>
 #endif
 
+#include <iostream>
+
 using namespace Tiled::Internal;
 
 MapView::MapView(QWidget *parent, Mode mode)
@@ -137,6 +139,7 @@ void MapView::setHandScrolling(bool handScrolling)
 
 bool MapView::event(QEvent *e)
 {
+
     // Ignore space bar events since they're handled by the MainWindow
     if (e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease) {
         if (static_cast<QKeyEvent*>(e)->key() == Qt::Key_Space) {
@@ -151,6 +154,10 @@ bool MapView::event(QEvent *e)
                 handlePinchGesture(pinch);
         }
     }
+
+    // FIXME (ALEX)
+    QWidget * viewport = this->viewport();
+    viewport->update();
 
     return QGraphicsView::event(e);
 }
@@ -230,6 +237,7 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
         mLastMousePos = event->globalPos();
 
         emit scrollBarChanged(hBar->value(), vBar->value());
+
         return;
     }
 
