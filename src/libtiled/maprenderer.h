@@ -181,6 +181,7 @@ public:
      * Returns the tile coordinates matching the given screen position.
      */
     virtual QPointF screenToTileCoords(qreal x, qreal y) const = 0;
+//    virtual QPointF screenToTileCoordsToCreate(qreal x, qreal y) const = 0;
     inline QPointF screenToTileCoords(const QPointF &point) const;
 
     /**

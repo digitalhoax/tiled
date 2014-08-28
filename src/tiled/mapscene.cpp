@@ -171,6 +171,7 @@ void MapScene::setSelectedTool(AbstractTool *tool)
     mSelectedTool = tool;
 }
 
+// TODO (ALEX): refresh
 void MapScene::refreshScene()
 {
     mLayerItems.clear();

@@ -122,7 +122,7 @@ MapDocument::MapDocument(Map *map, const QString &fileName):
 }
 
 void MapDocument::setScrollBarValue(int valueX , int valueY) {
-       std::cout << "value: "<< valueX << " " << valueY << std::endl;
+//       std::cout << "value: "<< valueX << " " << valueY << std::endl;
        MapView *view = DocumentManager::instance()->currentMapView();
 
        if ( view ) {
