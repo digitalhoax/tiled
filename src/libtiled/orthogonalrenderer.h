@@ -72,6 +72,7 @@ public:
     
     using MapRenderer::screenToTileCoords;
     QPointF screenToTileCoords(qreal x, qreal y) const;
+    QPointF screenToTileCoordsToCreate(qreal x, qreal y) const;
 
     using MapRenderer::tileToScreenCoords;
     QPointF tileToScreenCoords(qreal x, qreal y) const;
@@ -83,6 +84,7 @@ public:
     QPointF pixelToScreenCoords(qreal x, qreal y) const;
 
     float getParallaxFromCurrentLayer() const;
+    float getParallaxZoomOffset() const;
 };
 
 } // namespace Tiled

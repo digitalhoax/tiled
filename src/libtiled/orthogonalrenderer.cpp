@@ -293,14 +293,14 @@ void OrthogonalRenderer::drawTileLayer(QPainter *painter,
 
     // TODO (ALEX) : find values
     float offset = tileWidth * hb * p * 4 * zoom;
-    std::cout << hb << "   "<< p << std::endl;
+//    std::cout << hb << "   "<< p << std::endl;
 
     for (int y = startY; y != endY; y += incY) {
         for (int x = startX; x != endX; x += incX) {
             const Cell &cell = layer->cellAt(x, y);
             if (cell.isEmpty())
                 continue;
-            std::cout << i << ": " << x << ",  "<< y << std::endl;
+//            std::cout << i << ": " << x << ",  "<< y << std::endl;
             renderer.render(cell,
                             QPointF(x * tileWidth  - offset, (y + 1) * tileHeight),
                             CellRenderer::BottomLeft, parallax);
@@ -472,24 +472,21 @@ QPointF OrthogonalRenderer::tileToPixelCoords(qreal x, qreal y) const
                    y * map()->tileHeight()* parallax);
 }
 
-float OrthogonalRenderer::getParallaxFromCurrentLayer() const {
-    TileLayer * layer = static_cast<TileLayer *>(m_currentLayer);
-     float parallax = 1.0f;
-
-     if(layer) {
-          parallax = layer->parallax();
-     }
-     return parallax;
-}
-
 QPointF OrthogonalRenderer::screenToTileCoords(qreal x, qreal y) const
 {
     // TODO (ALEX) : add parallax size
-
      float parallax = getParallaxFromCurrentLayer();
      return QPointF( x / map()->tileWidth() / parallax,
                      y / map()->tileHeight() / parallax );
 }
+
+//QPointF OrthogonalRenderer::screenToTileCoordsToCreate(qreal x, qreal y) const
+//{
+//    // TODO (ALEX) : add parallax size
+//     float parallax = getParallaxFromCurrentLayer();
+//     return QPointF( (x + getParallaxZoomOffset()) / map()->tileWidth() / parallax,
+//                     y / map()->tileHeight() / parallax );
+//}
 
 QPointF OrthogonalRenderer::tileToScreenCoords(qreal x, qreal y) const
 {
@@ -506,4 +503,26 @@ QPointF OrthogonalRenderer::screenToPixelCoords(qreal x, qreal y) const
 QPointF OrthogonalRenderer::pixelToScreenCoords(qreal x, qreal y) const
 {
     return QPointF(x, y);
+}
+
+float OrthogonalRenderer::getParallaxFromCurrentLayer() const {
+    TileLayer * layer = static_cast<TileLayer *>(m_currentLayer);
+     float parallax = 1.0f;
+
+     if(layer) {
+          parallax = layer->parallax();
+     }
+     return parallax;
+}
+
+float OrthogonalRenderer::getParallaxZoomOffset() const {
+    float parallax = getParallaxFromCurrentLayer();
+    int tileWidth = map()->tileWidth() * parallax;
+    float zoom = m_zoom;
+    float p = parallax -1;
+    float hb = ( static_cast<float>(m_scrollBarX) / static_cast<float>(m_maxX) ) * 100.0f;
+
+    // TODO (ALEX) : find values
+    float offset = tileWidth * hb * p * 4 * zoom;
+    return offset;
 }
